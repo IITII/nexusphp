@@ -1,0 +1,66 @@
+version: '3'
+services:
+  nginx:
+    image: sikii/nexusphp_nginx
+    build: .
+    container_name: nginx
+    hostname: nginx
+    network_mode: bridge
+    restart: unless-stopped
+    # user: "65534:82"
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      # - 80:80
+      # - 443:443
+      - 8080:8080
+    environment:
+      - TZ=Asia/Shanghai
+      - PHP_TZ=Asia/Shanghai
+    volumes:
+      # - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nexusphp:/nexusphp
+      # 队列守护进程(>=1.8需要), 任务需要进容器手动添加
+      # - ./supervisor:/etc/supervisor
+    depends_on:
+      - mysql
+      - redis
+  mysql:
+    image: mysql
+    container_name: mysql
+    hostname: mysql
+    restart: unless-stopped
+    # user: 0:0
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      - 33060:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=password
+      - MYSQL_USER=password
+      - MYSQL_PASSWORD=password
+      - TZ=Asia/Shanghai
+    volumes:
+      # - ./mysql/etc/mysql:/etc/mysql #配置目录映射（可选）
+      - ./mysql/var/lib/mysql:/var/lib/mysql #数据目录映射（可选）
+      - ./mysql/var/log/mysql:/var/log/mysql #日志目录映射（可选）
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+    ports:
+      - 63790:6379
+    command: redis-server --requirepass password
+    volumes:
+      - ./redis/data:/data

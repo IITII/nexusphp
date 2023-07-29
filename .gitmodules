@@ -1,0 +1,3 @@
+[submodule "nexusphp"]
+	path = nexusphp
+	url = https://github.com/xiaomlove/nexusphp.git
