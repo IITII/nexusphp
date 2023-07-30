@@ -1,9 +1,9 @@
 # 使用Ubuntu 22.04镜像作为基础镜像
 FROM ubuntu:22.04
 
-# 设置时区（可选步骤）
-ENV TZ=Asia/Shanghai
-ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Shanghai \
+    DEBIAN_FRONTEND=noninteractive \
+    ROOT_PATH=/nexusphp
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # 更新包列表并安装Nginx和PHP及相关扩展
@@ -26,7 +26,7 @@ RUN apt-get update \
 
 # others
 RUN apt-get purge -y apache2 \
-    && apt-get install -y nginx vim less telnet unzip jq ncdu lsof tree curl wget supervisor \
+    && apt-get install -y nginx vim less telnet unzip jq ncdu lsof tree curl wget supervisor bcron \
     && sed -i 's/listen = \/run\/php\/php.*-fpm\.sock/listen = \/run\/php\/php-fpm.sock/g' \
     /etc/php/*/fpm/pool.d/www.conf
 

@@ -29,25 +29,27 @@
 6. 启动容器：`docker-compose up -d`
 7. 进入 nginx 容器: `docker exec -it nginx bash`
 8. 安装依赖: `composer install`
-9. 安装之前需要手动创建数据库，执行 `docker exec -it mysql bash`
-10. 登录数据库：`mysql -uroot -p`，密码无回显
+9. `cp -R nexus/Install/install public/`，复制 `nexus/Install/install` 到 `public/`，保证最后 `public/install/install.php` 存在
+10. 安装之前需要手动创建数据库，执行 `docker exec -it mysql bash`
+11. 登录数据库：`mysql -uroot -p`，密码无回显
 
 ```mysql
 # https://doc.nexusphp.org/installation.html#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93
 create database `nexusphp` default charset=utf8mb4 collate utf8mb4_general_ci;
 ```
-11. 打开 `http://localhost:8080/`, 正常情况下自动跳转到 `http://localhost:8080/install/install.php`
-12. 从界面可以看出安装一共5步。检查环境, 创建 .env, 创建 MySQL 表, 导入数据, 建立管理员账户
-13. 第一步，直接下一步。
-14. 第二步，按需填入相关配置。最后会保存在 `nexusphp/.env`. 这里可能会有权限问题。 因为 php 默认是以 www-data 用户运行而非 root。映射的文件大概率没有权限。可以在容器内选择一下做法其中一种.
+12. 打开 `http://localhost:8080/`, 正常情况下自动跳转到 `http://localhost:8080/install/install.php`
+13. 从界面可以看出安装一共5步。检查环境, 创建 .env, 创建 MySQL 表, 导入数据, 建立管理员账户
+14. 第一步，直接下一步。
+15. 第二步，按需填入相关配置。最后会保存在 `nexusphp/.env`. 这里可能会有权限问题。 因为 php 默认是以 www-data 用户运行而非 root。映射的文件大概率没有权限。可以在容器内选择一下做法其中一种.
     * `touch .env` 然后再修改权限
     * `chmod -R 777 /nexusphp`
     * 备份原目录，chmod 777，安装完成后 cp .env 文件，恢复目录
-15. 第三步，直接下一步。
-16. 第四步，直接下一步。
-17. 第五步按需填写，完成。至此 `nexusphp` 已经安装完成，打开 `http://localhost:8080/` 登录即可。
-18. 可以的话，可以考虑删除 install 目录，`rm -rf nexusphp/public/install`。
-19. 修改定时任务，添加 supervisor 任务，如 [队列守护进程(>=1.8需要)](#魔力不会增加)
+16. 第三步，直接下一步。
+17. 第四步，直接下一步。
+18. 第五步按需填写，完成。至此 `nexusphp` 已经安装完成，打开 `http://localhost:8080/` 登录即可。
+19. 可以的话，可以考虑删除 install 目录，`rm -rf nexusphp/public/install`。
+20. 修改定时任务，添加 supervisor 任务，如 [队列守护进程(>=1.8需要)](#魔力不会增加)
+    * [创建后台任务](https://doc.nexusphp.org/installation.html#%E5%88%9B%E5%BB%BA%E5%90%8E%E5%8F%B0%E4%BB%BB%E5%8A%A1)
 
 ![第一步](./docs/imgs/1.png)
 ![第二步](./docs/imgs/2.png)

@@ -1,0 +1,3 @@
+# 需要切换为 www-data 用户或者把 php 用户切换为其他用户也可
+* * * * * cd $ROOT_PATH && php artisan schedule:run >> /tmp/schedule_DOMAIN.log
+* * * * * cd $ROOT_PATH && php include/cleanup_cli.php >> /tmp/cleanup_cli_DOMAIN.log
